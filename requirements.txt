@@ -1,0 +1,27 @@
+# Core
+numpy==1.26.4
+python-dotenv==1.0.1
+
+# UI
+streamlit==1.31.1
+
+# LlamaIndex
+llama-index==0.12.3
+llama-index-core==0.12.3
+llama-index-vector-stores-chroma==0.4.1
+llama-index-embeddings-huggingface==0.3.1
+llama-index-llms-llama-cpp==0.3.0
+
+# Vector DB
+chromadb==0.4.24
+
+# PDF parsing
+pypdf==4.2.0
+
+# Embeddings
+transformers==4.36.2
+sentence-transformers==2.7.0
+torch==2.1.2
+
+# Local LLM
+llama-cpp-python==0.2.56
