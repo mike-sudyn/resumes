@@ -1,9 +1,13 @@
-import streamlit as st
+import os
 import chromadb
+import streamlit as st
 from llama_index.core import VectorStoreIndex, Settings
 from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-from llama_index.llms.llama_cpp import LlamaCPP
+from llama_index.llms.openai import OpenAI
+from dotenv import load_dotenv
+
+load_dotenv()
 
 CHROMA_DIR = "./chroma_db"
 COLLECTION_NAME = "resumes"
@@ -17,11 +21,16 @@ def load_index():
         model_name="sentence-transformers/all-MiniLM-L6-v2"
     )
 
-    llm = LlamaCPP(
-        model_path="./models/tinyllama.gguf",
+    if not os.getenv("OPENAI_API_KEY"):
+        st.warning(
+            "OPENAI_API_KEY not set. Set it in your environment to use gpt-4o-mini."
+        )
+
+    llm = OpenAI(
+        model="gpt-4o-mini",
         temperature=0.2,
-        max_new_tokens=512,
-        context_window=2048,
+        max_output_tokens=512,
+        api_key=os.getenv("OPENAI_API_KEY")
     )
 
     Settings.llm = llm
