@@ -2,6 +2,7 @@ import os
 import chromadb
 import streamlit as st
 from llama_index.core import VectorStoreIndex, Settings
+from llama_index.core.vector_stores import MetadataFilter, MetadataFilters
 from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.llms.openai import OpenAI
@@ -101,6 +102,14 @@ if st.session_state.selected_candidate:
     Present the information in a clear and concise manner.
     """
 
+    filters = MetadataFilters(
+        filters=[MetadataFilter(key="file_name", value=st.session_state.selected_candidate)]
+    )
+    filtered_query_engine = index.as_query_engine(
+        similarity_top_k=5,
+        filters=filters
+    )
+
     with st.spinner("Generating candidate summary..."):
-        result = query_engine.query(detail_query)
+        result = filtered_query_engine.query(detail_query)
     st.markdown(result.response)
